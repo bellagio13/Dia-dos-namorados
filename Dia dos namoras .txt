@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feliz Dia dos Namorados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset */
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      color: #fff;
+      background: #000;
+    }
+
+    /* Fundo céu estrelado animado */
+    .stars-background {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      overflow: hidden;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation-name: twinkle;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 0.2; }
+    }
+
+    /* Tela inicial */
+    #telaInicial {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      z-index: 1;
+    }
+    #telaInicial h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px rgba(255, 182, 193, 0.8);
+    }
+    #telaInicial .btn {
+      background-color: #ff69b4;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-size: 1.3rem;
+      color: white;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 180px;
+      user-select: none;
+      font-weight: 600;
+      box-shadow: 0 0 10px #ff69b4aa;
+      position: relative;
+      transition: background-color 0.3s ease;
+    }
+    #telaInicial .btn:hover {
+      background-color: #ff1493;
+      box-shadow: 0 0 20px #ff1493cc;
+    }
+    /* Para garantir ordem e espaço entre botões */
+    #btnContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Galeria */
+    #galeria {
+      display: none;
+      position: relative;
+      padding: 30px 20px 60px;
+      background: #000;
+      background-image: radial-gradient(white 1px, transparent 1px);
+      background-size: 60px 60px;
+      color: #fff;
+      min-height: 100vh;
+      text-align: center;
+      font-weight: 500;
+      overflow-y: auto;
+      z-index: 1;
+    }
+    #galeria.active {
+      display: block;
+    }
+    #galeria h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #ff69b4;
+    }
+    .foto-principal {
+      width: 80%;
+      max-width: 600px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px #ff1493cc;
+      margin-bottom: 25px;
+    }
+    .frase-amor {
+      font-size: 1.3rem;
+      font-style: italic;
+      margin-bottom: 15px;
+      max-width: 700px;
+      color: #f0c0d6;
+      line-height: 1.5;
+      text-shadow: 0 0 5px #ff69b4aa;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* Contador em grid */
+    .contador {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px 40px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 10px auto 15px;
+      max-width: 400px;
+      color: #ff69b4;
+      text-shadow: 0 0 5px #ff1493;
+    }
+    .contador-bloco {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .contador-bloco span {
+      background: #330014;
+      padding: 12px 0;
+      border-radius: 10px;
+      user-select: none;
+      box-shadow: 0 0 12px #ff1493aa;
+      display: block;
+      width: 100%;
+    }
+    .contador-label {
+      font-weight: 400;
+      color: #ffb6c1;
+      font-size: 1rem;
+      margin-top: -8px;
+      user-select: none;
+      text-align: center;
+    }
+    .desde-texto {
+      margin-top: 10px;
+      font-size: 1.1rem;
+      color: #ffa6c9;
+      font-weight: 600;
+      text-shadow: 0 0 4px #ff69b4aa;
+      user-select: none;
+      margin-bottom: 40px;
+    }
+    /* Fotos menores com frase */
+    .bloco-foto {
+      display: flex;
+      align-items: center;
+      margin: 25px auto;
+      max-width: 850px;
+      width: 90%;
+    }
+    .foto-menor {
+      width: 180px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #ff69b4cc;
+    }
+    .frase {
+      font-size: 1.15rem;
+      color: #f8c0d0;
+      margin: 0 20px;
+      max-width: 60%;
+      font-weight: 500;
+      text-shadow: 0 0 6px #ff1493aa;
+    }
+    .esquerda {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    .direita {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+    /* Assinatura */
+    .assinatura {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      margin-top: 60px;
+      margin-bottom: 40px;
+      color: #ffb6c1;
+      text-shadow: 0 0 8px #ff69b4;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fundo céu estrelado (para tela inicial e galeria) -->
+  <div class="stars-background" id="starsBackground"></div>
+
+  <!-- Tela Inicial -->
+  <div id="telaInicial">
+    <h1>Você está preparado para se emocionar? 💘</h1>
+    <div id="btnContainer">
+      <button class="btn" id="sim">Sim!</button>
+      <button class="btn" id="nao">Não</button>
+    </div>
+  </div>
+
+  <!-- Galeria -->
+  <div id="galeria">
+    <h1>Feliz Dia dos Namorados! 💖</h1>
+
+    <img class="foto-principal" src="https://i.postimg.cc/bJs9ZWhS/IMG-2261.jpg" alt="Foto Principal" />
+
+    <p class="frase-amor">
+      Amor, quero que você saiba o quanto você é importante pra mim, desde o primeiro instante que eu te vi, eu sabia que era você e todos os dias eu acordo com a certeza que sempre será você.
+    </p>
+
+    <div class="contador">
+      <div class="contador-bloco">
+        <span id="anos">0</span>
+        <div class="contador-label">Anos</div>
+      </div>
+      <div class="contador-bloco">
+        <span id="meses">0</span>
+        <div class="contador-label">Meses</div>
+      </div>
+      <div class="contador-bloco">
+        <span id="dias">0</span>
+        <div class="contador-label">Dias</div>
+      </div>
+      <div class="contador-bloco">
+        <span id="horas">0</span>
+        <div class="contador-label">Horas</div>
+      </div>
+      <div class="contador-bloco">
+        <span id="minutos">0</span>
+        <div class="contador-label">Minutos</div>
+      </div>
+      <div class="contador-bloco">
+        <span id="segundos">0</span>
+        <div class="contador-label">Segundos</div>
+      </div>
+    </div>
+
+    <div class="desde-texto">Desde 28 de julho de 2019</div>
+
+    <!-- Fotos menores com frases -->
+    <div class="bloco-foto esquerda">
+      <img class="foto-menor" src="https://i.postimg.cc/hP9bQVHs/IMG-2262.jpg" alt="Foto 2" />
+      <p class="frase">Cada momento contigo é um capítulo lindo da nossa história.</p>
+    </div>
+    <div class="bloco-foto direita">
+      <img class="foto-menor" src="https://i.postimg.cc/TY8JPtHh/IMG-2263.jpg" alt="Foto 3" />
+      <p class="frase">Nosso amor cresce e floresce a cada dia que passa.</p>
+    </div>
+    <div class="bloco-foto esquerda">
+      <img class="foto-menor" src="https://i.postimg.cc/FzSbZS19/IMG-2264.jpg" alt="Foto 4" />
+      <p class="frase">Você é meu porto seguro, meu lugar de paz.</p>
+    </div>
+    <div class="bloco-foto direita">
+      <img class="foto-menor" src="https://i.postimg.cc/gcLKdCsf/IMG-2265.jpg" alt="Foto 5" />
+      <p class="frase">Com você, a vida é mais colorida e cheia de alegria.</p>
+    </div>
+    <div class="bloco-foto esquerda">
+      <img class="foto-menor" src="https://i.postimg.cc/7LQgr92H/IMG-2266.jpg" alt="Foto 6" />
+      <p class="frase">Nosso amor é a música que embala meu coração.</p>
+    </div>
+    <div class="bloco-foto direita">
+      <img class="foto-menor" src="https://i.postimg.cc/g00v7Qrt/IMG-2267.jpg" alt="Foto 7" />
+      <p class="frase">Cada sorriso seu ilumina meus dias mais escuros.</p>
+    </div>
+    <div class="bloco-foto esquerda">
+      <img class="foto-menor" src="https://i.postimg.cc/R0nc9fQw/IMG-1678.jpg" alt="Foto 8" />
+      <p class="frase">Juntos somos imbatíveis, um time perfeito de amor.</p>
+    </div>
+
+    <div class="assinatura">Com amor e carinho, sua mulher.</div>
+  </div>
+
+  <script>
+    // Função para criar estrelas aleatórias no fundo
+    function criarEstrelas() {
+      const container = document.getElementById('starsBackground');
+      const numEstrelas = 100;
+
+      for (let i = 0; i < numEstrelas; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        star.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(star);
+      }
+    }
+    criarEstrelas();
+
+    // Botões da tela inicial
+    const btnSim = document.getElementById('sim');
+    const btnNao = document.getElementById('nao');
+    const telaInicial = document.getElementById('telaInicial');
+    const galeria = document.getElementById('galeria');
+
+    // Contador tempo juntos
+    const dataInicio = new Date(2019, 6, 28, 0, 0, 0); // Mês é 0-indexado (julho = 6)
+
+    function atualizarContador() {
+      const agora = new Date();
+      let totalSegundos = Math.floor((agora - dataInicio) / 1000);
+
+      const anos = Math.floor(totalSegundos / (365.25 * 24 * 3600));
+      totalSegundos -= anos * 365.25 * 24 * 3600;
+
+      const meses = Math.floor(totalSegundos / (30.44 * 24 * 3600));
+      totalSegundos -= meses * 30.44 * 24 * 3600;
+
+      const dias = Math.floor(totalSegundos / (24 * 3600));
+      totalSegundos -= dias * 24 * 3600;
+
+      const horas = Math.floor(totalSegundos / 3600);
+      totalSegundos -= horas * 3600;
+
+      const minutos = Math.floor(totalSegundos / 60);
+      totalSegundos -= minutos * 60;
+
+      const segundos = totalSegundos;
+
+      document.getElementById('anos').textContent = anos;
+      document.getElementById('meses').textContent = meses;
+      document.getElementById('dias').textContent = dias;
+      document.getElementById('horas').textContent = horas;
+      document.getElementById('minutos').textContent = minutos;
+      document.getElementById('segundos').textContent = segundos;
+    }
+
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+
+    // Botão "Não" que foge do clique
+    btnNao.addEventListener('mouseenter', () => {
+      const maxX = window.innerWidth - btnNao.offsetWidth;
+      const maxY = window.innerHeight - btnNao.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+      btnNao.style.position = 'fixed';
+      btnNao.style.left = randomX + 'px';
+      btnNao.style.top = randomY + 'px';
+    });
+
+    // Botão "Sim" mostra galeria
+    btnSim.addEventListener('click', () => {
+      telaInicial.style.display = 'none';
+      galeria.classList.add('active');
+    });
+  </script>
+</body>
+</html>
